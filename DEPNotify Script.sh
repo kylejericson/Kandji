@@ -399,10 +399,24 @@ TRIGGER="event"
 		echo "String fixed is $string" >> "$DEP_NOTIFY_LOG"
 		curl --location --request PATCH $string \
 		--header 'Content-Type: application/json' \
-		--header 'Authorization: Bearer 9940e1d4-03e9-4106-b31a-8a992a4e988d' \
+		--header 'Authorization: Bearer 9940e1d4-0000-0000-0000-8a992a4e988d' \
 		--data-raw '{
 		    "blueprint_id": "'"$BID"'" 
 		}'
+		
+		#Update Device
+		string="${string}${ID2}/action/updateinventory"
+		curl --location --request POST $string \
+		--header 'Content-Type: application/json' \
+		--header 'Authorization: Bearer 9940e1d4-0000-0000-0000-8a992a4e988d'
+		
+		#Send Blank Push
+		string="${string}${ID2}/action/blankpush/"
+		curl --location --request POST $string \
+		--header 'Content-Type: application/json' \
+		--header 'Authorization: Bearer 9940e1d4-0000-0000-0000-8a992a4e988d'
+		
+		/usr/local/bin/kandji update-mdm
 
 		open -a  /Library/Kandji/Kandji\ Agent.app/Contents/Resources/Helpers/Kandji\ Liftoff.app
 		sleep 5
